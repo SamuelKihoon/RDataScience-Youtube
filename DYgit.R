@@ -5,7 +5,7 @@
 install.packages('xlsx')
 library(xlsx)
 youtuber <- read.xlsx(file = file.path('C:/Rworks/youtubers.xlsx'),
-                      header=T, sheetName='매직박', as.data.frame=TRUE,
+                      header=T, sheetName='풍월량', as.data.frame=TRUE,
                       colIndex=c(2:6))
 
 conlist <- unique(youtuber$contents)
@@ -53,4 +53,9 @@ barplot(ds, main='좋아요/조회수',
         xlab='컨텐츠',
         ylab='비율')
 
-fffff
+#상위 5개 영상 출력
+view.t5 <- youtuber[order(-youtuber$views.1000),
+                    c('contents','views.1000','likes.100')][1:5,]
+
+view.t5
+
