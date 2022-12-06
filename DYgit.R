@@ -53,4 +53,4 @@ barplot(ds, main='좋아요/조회수',
         xlab='컨텐츠',
         ylab='비율')
 
-
+fffff
