@@ -1,5 +1,5 @@
 
-#git
+#git1234
 
 #엑셀 읽기
 install.packages('xlsx')
@@ -7,6 +7,7 @@ library(xlsx)
 youtuber <- read.xlsx(file = file.path('C:/Rworks/youtubers1.xlsx'),
                       header=T, sheetName='옥냥이', as.data.frame=TRUE,
                       colIndex=c(2:7))
+
 total <- read.xlsx(file = file.path('C:/Rworks/youtubers2.xlsx'),
                    header=T, sheetName='모듬', as.data.frame=TRUE,
                    colIndex=c(3:7))
@@ -57,15 +58,18 @@ con.view.box_uppermean <- function() {
 
 # 조회수-좋아요 관계
 view.likes.point <- function() {
-  yout.data <- youtuber[, c(2,3,6)] 
-  total.data <- total[, c(1,2,5)]
-  merged.data <- rbind(yout.data, total.data)
-  color <- c('red','blue')
-  plot(merged.data$views.1000, merged.data$likes.100,
-       main='조회수-좋아요 그래프',
-       xlab='조회수', ylab='좋아요',
-       col=color[merged.data$ctg], pch=c(merged.data$ctg))   #점의 모양 지정
+  yout.data <- youtuber[, c(2,3)] 
+  total.data <- total[, c(1,2)]
+  ggplot(total.data, aes(x=views.1000, y=likes.100))+
+    geom_point(color='red')+
+    geom_smooth(method='lm', formula = 'y~x', color='red')+
+    geom_point(data=yout.data, aes(x=views.1000, y=likes.100), color='blue')+
+    geom_smooth(data=yout.data, aes(x=views.1000, y=likes.100), color='blue',
+                method='loess', formula = 'y~x')+
+    scale_x_continuous(limits = c(0, max(yout.data$views.1000)))+
+    scale_y_continuous(limits = c(0, max(yout.data$likes.100)))
 }
+
 
 #컨텐츠별 조회수/좋아요 비율
 view.likes.bar <- function() {
