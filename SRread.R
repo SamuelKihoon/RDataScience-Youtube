@@ -5,17 +5,17 @@ install.packages('xlsx')
 
 
 library(xlsx)
+library(ggplot2)
 
 
 
 
 
-
-youtuber <- read.xlsx(file = file.path('/Users/soryun/Desktop/Rworks/RDataScience-Youtube/youtubers1.xlsx'),
-                      header=T, sheetName='옥냥이', as.data.frame=TRUE,
+youtuber <- read.xlsx(file = file.path('/Users/kimsoryun/Documents/RDataScience-Youtube/youtubers1.xlsx'),
+                      header=T, sheetName='보물섬', as.data.frame=TRUE,
                       colIndex=c(2:7))
 
-total <- read.xlsx(file = file.path('/Users/soryun/Desktop/Rworks/RDataScience-Youtube/youtubers2.xlsx'),
+total <- read.xlsx(file = file.path('/Users/kimsoryun/Documents/RDataScience-Youtube/youtubers2.xlsx'),
                    header=T, sheetName='모듬', as.data.frame=TRUE,
                    colIndex=c(3:7))
 
@@ -99,6 +99,15 @@ top10 <- function() {
 #추천 컨텐츠 정하기
 over_10p.list <- conlist[table(youtuber$contents)>=5]
 
+#컨텐츠 별 예상 수익 총합 (원)
+mean.by.contents('likely_return.1000')*table(youtuber$contents)
+
+con.return.pie <- function() {
+  tot <- mean.by.contents('likely_return.1000')*table(youtuber$contents)
+  pie(tot, main='컨텐츠 별 예상 수익 총합',
+      radius=1)
+}
+
 
 con.view.box()
 con.view.box_uppermean()
@@ -106,5 +115,4 @@ view.likes.point()
 view.likes.bar()
 top10()
 youtuber
-
-
+con.return.pie()
