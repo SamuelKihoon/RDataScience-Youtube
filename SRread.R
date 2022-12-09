@@ -11,11 +11,11 @@ library(ggplot2)
 
 
 
-youtuber <- read.xlsx(file = file.path('/Users/kimsoryun/Documents/RDataScience-Youtube/youtubers1.xlsx'),
+youtuber <- read.xlsx(file = file.path('/Users/kimsoryun/Documents/rtube/RDataScience-Youtube/youtubers1.xlsx'),
                       header=T, sheetName='보물섬', as.data.frame=TRUE,
                       colIndex=c(2:7))
 
-total <- read.xlsx(file = file.path('/Users/kimsoryun/Documents/RDataScience-Youtube/youtubers2.xlsx'),
+total <- read.xlsx(file = file.path('/Users/kimsoryun/Documents/rtube/RDataScience-Youtube/youtubers2.xlsx'),
                    header=T, sheetName='모듬', as.data.frame=TRUE,
                    colIndex=c(3:7))
 
@@ -104,8 +104,15 @@ mean.by.contents('likely_return.1000')*table(youtuber$contents)
 
 con.return.pie <- function() {
   tot <- mean.by.contents('likely_return.1000')*table(youtuber$contents)
-  pie(tot, main='컨텐츠 별 예상 수익 총합',
-      radius=1)
+  tot <- (tot/sum(tot))*100
+  pie <- data.frame(conlist, tot)[2:3]
+  colnames(pie)<- c('contents','tlr')
+  ggplot(pie, aes(x='', y=tlr ,fill = factor(conlist))) +
+    geom_bar(stat='identity')+
+    theme_void()+
+    coord_polar(theta = "y", start=0)+
+    geom_text(aes(label=paste0(round(tlr,1),'%')),
+              position=position_stack(vjust=0.5))
 }
 
 
