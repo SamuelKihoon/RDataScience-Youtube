@@ -10,17 +10,6 @@ install.packages('knitr')
 
 
 
-#12345
-#1234567
-
-#RMarkdown
-#Kntir
-install.packages('rmarkdown')
-install.packages('knitr')
-
-
-
-
 #엑셀 읽기
 install.packages('xlsx')
 library(xlsx)
