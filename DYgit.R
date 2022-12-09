@@ -1,9 +1,19 @@
 
 #git1234
+#12345
+#1234567
+
+#RMarkdown
+#Kntir
+install.packages('rmarkdown')
+install.packages('knitr')
+
+
 
 #엑셀 읽기
 install.packages('xlsx')
 library(xlsx)
+library(ggplot2)
 youtuber <- read.xlsx(file = file.path('C:/Rworks/youtubers1.xlsx'),
                       header=T, sheetName='옥냥이', as.data.frame=TRUE,
                       colIndex=c(2:7))
@@ -12,7 +22,7 @@ total <- read.xlsx(file = file.path('C:/Rworks/youtubers2.xlsx'),
                    header=T, sheetName='모듬', as.data.frame=TRUE,
                    colIndex=c(3:7))
 
-youtuber$likes.rate <- youtuber$likes/youtuber$views.1000 #좋아요 비율 만들기
+youtuber$likes.rate <- (youtuber$likes/youtuber$views.1000)*100 #좋아요 비율 만들기
 conlist <- unique(youtuber$contents)  #컨텐츠 종류 저장
 
 mean.by.contents <- function(subject) {
@@ -35,7 +45,7 @@ con.view.box <- function() {
                      'contents'] #조회수가 가장 높은 컨텐츠 저장
   
   max.mean <- names(vbc)[vbc== max(vbc)] #평균 조회수가 가장 높은 컨텐츠 저장
-  cat('조회수가 가장 높은 영상의 컨텐츠는',max.con,'입니다.')
+  cat('조회수가 가장 높은 영상의 컨텐츠는',max.con,'입니다.','\n')
   cat('평균 조회수가 가장 높은 영상의 컨텐츠는',max.mean,'입니다.')
 }
 
@@ -76,7 +86,7 @@ view.likes.bar <- function() {
   ds <- mean.by.contents('likes.rate')
   barplot(ds, main='좋아요/조회수',
           xlab='컨텐츠',
-          ylab='비율')
+          ylab='비율(%)')
 }
 
 #상위 10개 영상 출력
@@ -85,10 +95,12 @@ top10 <- function() {
                        c('contents','views.1000','likes.100','likes.rate')][1:10,]
   
   print(view.t10)
+  
 }
 
 #추천 컨텐츠 정하기
 over_10p.list <- conlist[table(youtuber$contents)>=5]
+
 
 
 con.view.box()
