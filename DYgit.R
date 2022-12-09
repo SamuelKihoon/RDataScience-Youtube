@@ -95,7 +95,9 @@ top10 <- function() {
                        c('contents','views.1000','likes.100','likes.rate')][1:10,]
   
   print(view.t10)
-  
+  con.num <- table(view.t10$contents)
+  con.mode <- names(con.num)[con.num == max(con.num)]
+  cat('조회수 탑10에 가장 많은 컨텐츠는',con.mode,'입니다.')
 }
 
 #추천 컨텐츠 정하기
