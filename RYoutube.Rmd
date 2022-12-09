@@ -1,7 +1,7 @@
 ---
 title: "RYouTube"
 output: html_document
-date: "소륜,대영,기훈,준서"
+date: "소륜,대영,기훈,준서 R Projrct"
 editor_options: 
   chunk_output_type: console
 ---
@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## R Data Mining
 
-이 문서는 경희대학교 빅데이터응용학과 R 데이터 마이닝 프로젝트에 관한 웹 페이지 문서입니다. 이 웹 페이지는 아직 미완성이며, 아래 링크는 대영-소륜-기훈-준서 간 공유가 가능합니다. 한글 깨짐이 많이 발견되었으며, 이를 고치기 위해 최선을 다하는 중.
+이 문서는 경희대학교 빅데이터응용학과 R 데이터 마이닝 프로젝트에 관한 웹 페이지 문서입니다. (지도교수님 김민경)이 웹 페이지는 아직 미완성이며, 아래 링크는 대영-소륜-기훈-준서 간 공유가 가능합니다. 한글 깨짐이 많이 발견되었으며, 이를 고치기 위해 최선을 다하는 중.
 <http://Rtube.bu.to>.
 
 This web R document from  **Big Data Engineering Proj.** , Kyung Hee University. 
