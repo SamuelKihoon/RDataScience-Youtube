@@ -106,12 +106,16 @@ over_10p.list
 
 
 con.return.pie <- function() {
-  pie <- data.frame(conlist, tot)
+  tot <- mean.by.contents('likely_return.1000')*table(youtuber$contents)
+  tot <- (tot/sum(tot))*100
+  pie <- data.frame(conlist, tot)[2:3]
   colnames(pie)<- c('contents','tlr')
   ggplot(pie, aes(x='', y=tlr ,fill = factor(conlist))) +
     geom_bar(stat='identity')+
     theme_void()+
-    coord_polar(theta = "y", start=0)
+    coord_polar(theta = "y", start=0)+
+    geom_text(aes(label=paste0(round(tlr,1),'%')),
+              position=position_stack(vjust=0.5))
 }
 
 
@@ -122,3 +126,4 @@ view.likes.bar()
 top10()
 youtuber$likely_return.1000
 con.return.pie()
+
