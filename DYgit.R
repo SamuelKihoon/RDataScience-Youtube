@@ -14,8 +14,8 @@ install.packages('knitr')
 install.packages('xlsx')
 library(xlsx)
 library(ggplot2)
-youtuber <- read.xlsx(file = file.path('C:/Rworks/youtubers2.xlsx'),
-                      header=T, sheetName='정찬성', as.data.frame=TRUE,
+youtuber <- read.xlsx(file = file.path('C:/Rworks/youtubers1.xlsx'),
+                      header=T, sheetName='옥냥이', as.data.frame=TRUE,
                       colIndex=c(2:7))
 
 total <- read.xlsx(file = file.path('C:/Rworks/youtubers2.xlsx'),
@@ -100,11 +100,9 @@ top10 <- function() {
   cat('조회수 탑10에 가장 많은 컨텐츠는',con.mode,'입니다.')
 }
 
-#추천 컨텐츠 정하기
-over_10p.list <- conlist[table(youtuber$contents)>=5]
-over_10p.list
 
 
+#예상 수익 비율
 con.return.pie <- function() {
   tot <- mean.by.contents('likely_return.1000')*table(youtuber$contents)
   tot <- (tot/sum(tot))*100
@@ -119,11 +117,85 @@ con.return.pie <- function() {
 }
 
 
+
+# 컨텐츠-좋아요수 관계 (박스플롯)
+con.like.box <- function() {
+  clb <- mean.by.contents('likes.100')
+  boxplot(likes.100~contents,  
+          data=youtuber,            
+          main='컨텐츠별 좋아요수')
+  max.l.con <-youtuber[which(youtuber$likes.100==max(youtuber$likes.100)),
+                       'contents'] #조회수가 가장 높은 컨텐츠 저장
+  
+  max.l.mean <- names(clb)[clb== max(clb)] #평균 좋아요수가 가장 높은 컨텐츠 저장
+  cat('좋아요수가 가장 높은 영상의 컨텐츠는',max.l.con,'입니다.')
+  cat('평균 좋아요수가 가장 높은 영상의 컨텐츠는',max.l.mean,'입니다.')
+}
+
+# 평균 이상 (좋아요수) 데이터만 추출
+con.like.box_uppermean <- function() {
+  upper.l.mean <- c()  #좋아요수가 평균 이상인 컨텐츠 목록
+  for(i in 1:length(conlist)){
+    if(mean(youtuber[which(youtuber$contents==conlist[i])
+                     ,"likes.100"]) >= mean(youtuber$likes.100)) {
+      upper.l.mean <- append(upper.l.mean, conlist[i])
+    } #조건에 만족하는 컨텐츠를 목록에 추가
+  }
+  upperlike <- subset(youtuber, contents %in% upper.l.mean) 
+  #upper.l.mean에 있는 컨텐츠만 있는 subset 저장
+  
+  boxplot(likes.100~contents,  
+          data=upperlike,            
+          main='컨텐츠별 평균 이상 좋아요수')
+}
+
+
+#추천 컨텐츠 정하기
+con.rec <- function() {
+  over_10p.list <- conlist[table(youtuber$contents)>=5]
+  over_10p.sub <- subset(youtuber, contents %in% over_10p.list)
+  conlist <- sort(unique(over_10p.sub$contents)) 
+  mean.by.contents <- function(subject) {
+    result <- c()
+    for(i in 1:length(conlist)) {
+      result <- append(result, mean(over_10p.sub[which(over_10p.sub$contents==conlist[i]),
+                                             subject]))
+    }
+    names(result) <- conlist
+    return(result)
+  }
+  subtlr <- mean.by.contents('likely_return.1000')*table(over_10p.sub$contents) #총 예상수익
+  subv <- mean.by.contents('views.1000') #조회수
+  sublr <- mean.by.contents('likes.rate')  #좋아요 비율
+  
+  score <- c()
+  tmp.order <- order(subtlr)
+  for(j in 1:length(tmp.order)) {
+    score[tmp.order[j]] <- j
+  }
+  tmp.order <- order(subv)
+  for(j in 1:length(tmp.order)) {
+    score[tmp.order[j]] <- score[tmp.order[j]]+ j*5
+  }
+  tmp.order <- order(sublr)
+  for(j in 1:length(tmp.order)) {
+    score[tmp.order[j]] <- score[tmp.order[j]]+ j*5
+  }
+  ds <- as.data.frame(cbind(subtlr, subv, sublr, score))
+  ds[order(ds$score, decreasing = TRUE),]
+}  
+
+
+
+
 con.view.box()
 con.view.box_uppermean()
 view.likes.point()
 view.likes.bar()
 top10()
-youtuber$likely_return.1000
 con.return.pie()
+con.like.box()
+con.like.box_uppermean()
+con.rec()
+
 
