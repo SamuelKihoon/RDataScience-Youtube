@@ -56,7 +56,7 @@ con.view.box_uppermean <- function() {
     if(mean(youtuber[which(youtuber$contents==conlist[i])
                      ,"views.1000"]) >= mean(youtuber$views.1000)) {
       upper.mean <- append(upper.mean, conlist[i])
-    } #조건의 만족하는 컨텐츠를 목록에 추가
+    } #조건에 만족하는 컨텐츠를 목록에 추가
   }
   upperview <- subset(youtuber, contents %in% upper.mean) 
   #upper.mean에 있는 컨텐츠만 있는 subset 저장
@@ -101,8 +101,12 @@ top10 <- function() {
 }
 
 
+<<<<<<< HEAD
 
 #예상 수익 비율
+=======
+#컨텐츠 별 예상 수익 총합
+>>>>>>> 8486bf3d7869fd4267007ebaf3f34b05f64cd9ce
 con.return.pie <- function() {
   tot <- mean.by.contents('likely_return.1000')*table(youtuber$contents)
   tot <- (tot/sum(tot))*100
@@ -114,6 +118,37 @@ con.return.pie <- function() {
     coord_polar(theta = "y", start=0)+
     geom_text(aes(label=paste0(round(tlr,1),'%')),
               position=position_stack(vjust=0.5))
+}
+
+# 컨텐츠-좋아요수 관계 (박스플롯)
+con.like.box <- function() {
+  clb <- mean.by.contents('likes.100')
+  boxplot(likes.100~contents,  
+          data=youtuber,            
+          main='컨텐츠별 좋아요수')
+  max.l.con <-youtuber[which(youtuber$likes.100==max(youtuber$likes.100)),
+                       'contents'] #조회수가 가장 높은 컨텐츠 저장
+  
+  max.l.mean <- names(clb)[clb== max(clb)] #평균 좋아요수가 가장 높은 컨텐츠 저장
+  cat('좋아요수가 가장 높은 영상의 컨텐츠는',max.l.con,'입니다.')
+  cat('평균 좋아요수가 가장 높은 영상의 컨텐츠는',max.l.mean,'입니다.')
+}
+
+# 평균 이상 (좋아요수) 데이터만 추출
+con.like.box_uppermean <- function() {
+  upper.l.mean <- c()  #좋아요수가 평균 이상인 컨텐츠 목록
+  for(i in 1:length(conlist)){
+    if(mean(youtuber[which(youtuber$contents==conlist[i])
+                     ,"likes.100"]) >= mean(youtuber$likes.100)) {
+      upper.l.mean <- append(upper.l.mean, conlist[i])
+    } #조건에 만족하는 컨텐츠를 목록에 추가
+  }
+  upperlike <- subset(youtuber, contents %in% upper.l.mean) 
+  #upper.l.mean에 있는 컨텐츠만 있는 subset 저장
+  
+  boxplot(likes.100~contents,  
+          data=upperlike,            
+          main='컨텐츠별 평균 이상 좋아요수')
 }
 
 
@@ -197,5 +232,6 @@ con.return.pie()
 con.like.box()
 con.like.box_uppermean()
 con.rec()
+
 
 

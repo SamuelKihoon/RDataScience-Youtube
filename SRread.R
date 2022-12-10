@@ -11,11 +11,11 @@ library(ggplot2)
 
 
 
-youtuber <- read.xlsx(file = file.path('/Users/kimsoryun/Documents/RDataScience-Youtube/youtubers1.xlsx'),
+youtuber <- read.xlsx(file = file.path('/Users/kimsoryun/Documents/rtube/RDataScience-Youtube/youtubers1.xlsx'),
                       header=T, sheetName='보물섬', as.data.frame=TRUE,
                       colIndex=c(2:7))
 
-total <- read.xlsx(file = file.path('/Users/kimsoryun/Documents/RDataScience-Youtube/youtubers2.xlsx'),
+total <- read.xlsx(file = file.path('/Users/kimsoryun/Documents/rtube/RDataScience-Youtube/youtubers2.xlsx'),
                    header=T, sheetName='모듬', as.data.frame=TRUE,
                    colIndex=c(3:7))
 
@@ -48,21 +48,21 @@ con.view.box <- function() {
   cat('평균 조회수가 가장 높은 영상의 컨텐츠는',max.mean,'입니다.')
 }
 
-# 평균 이상 데이터만 추출
+# 평균 이상 (조회수) 데이터만 추출
 con.view.box_uppermean <- function() {
   upper.mean <- c()  #조회수가 평균 이상인 컨텐츠 목록
   for(i in 1:length(conlist)){
     if(mean(youtuber[which(youtuber$contents==conlist[i])
                      ,"views.1000"]) >= mean(youtuber$views.1000)) {
       upper.mean <- append(upper.mean, conlist[i])
-    } #조건의 만족하는 컨텐츠를 목록에 추가
+    } #조건에 만족하는 컨텐츠를 목록에 추가
   }
   upperview <- subset(youtuber, contents %in% upper.mean) 
   #upper.mean에 있는 컨텐츠만 있는 subset 저장
   
   boxplot(views.1000~contents,  
           data=upperview,            
-          main='컨텐츠별 조회수')
+          main='컨텐츠별 평균 이상 조회수')
 }
 
 # 조회수-좋아요 관계
@@ -99,13 +99,51 @@ top10 <- function() {
 #추천 컨텐츠 정하기
 over_10p.list <- conlist[table(youtuber$contents)>=5]
 
-#컨텐츠 별 예상 수익 총합 (원)
+#컨텐츠 별 예상 수익 총합
 mean.by.contents('likely_return.1000')*table(youtuber$contents)
 
 con.return.pie <- function() {
   tot <- mean.by.contents('likely_return.1000')*table(youtuber$contents)
-  pie(tot, main='컨텐츠 별 예상 수익 총합',
-      radius=1)
+  tot <- (tot/sum(tot))*100
+  pie <- data.frame(conlist, tot)[2:3]
+  colnames(pie)<- c('contents','tlr')
+  ggplot(pie, aes(x='', y=tlr ,fill = factor(conlist))) +
+    geom_bar(stat='identity')+
+    theme_void()+
+    coord_polar(theta = "y", start=0)+
+    geom_text(aes(label=paste0(round(tlr,1),'%')),
+              position=position_stack(vjust=0.5))
+}
+
+# 컨텐츠-좋아요수 관계 (박스플롯)
+con.like.box <- function() {
+  clb <- mean.by.contents('likes.100')
+  boxplot(likes.100~contents,  
+          data=youtuber,            
+          main='컨텐츠별 좋아요수')
+  max.l.con <-youtuber[which(youtuber$likes.100==max(youtuber$likes.100)),
+                     'contents'] #조회수가 가장 높은 컨텐츠 저장
+  
+  max.l.mean <- names(clb)[clb== max(clb)] #평균 좋아요수가 가장 높은 컨텐츠 저장
+  cat('좋아요수가 가장 높은 영상의 컨텐츠는',max.l.con,'입니다.')
+  cat('평균 좋아요수가 가장 높은 영상의 컨텐츠는',max.l.mean,'입니다.')
+}
+
+# 평균 이상 (좋아요수) 데이터만 추출
+con.like.box_uppermean <- function() {
+  upper.l.mean <- c()  #좋아요수가 평균 이상인 컨텐츠 목록
+  for(i in 1:length(conlist)){
+    if(mean(youtuber[which(youtuber$contents==conlist[i])
+                     ,"likes.100"]) >= mean(youtuber$likes.100)) {
+      upper.l.mean <- append(upper.l.mean, conlist[i])
+    } #조건에 만족하는 컨텐츠를 목록에 추가
+  }
+  upperlike <- subset(youtuber, contents %in% upper.l.mean) 
+  #upper.l.mean에 있는 컨텐츠만 있는 subset 저장
+  
+  boxplot(likes.100~contents,  
+          data=upperlike,            
+          main='컨텐츠별 평균 이상 좋아요수')
 }
 
 
@@ -116,3 +154,5 @@ view.likes.bar()
 top10()
 youtuber
 con.return.pie()
+con.like.box()
+con.like.box_uppermean()

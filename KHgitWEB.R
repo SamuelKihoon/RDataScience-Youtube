@@ -31,12 +31,8 @@ total <- read.xlsx(file = file.path('/Users/samuelgalaxys/Desktop/Rworks/RDataSc
 
  
 
-
-
-
-
 youtuber$likes.rate <- (youtuber$likes/youtuber$views.1000)*100 #좋아요 비율 만들기
-conlist <- unique(youtuber$contents)  #컨텐츠 종류 저장
+conlist <- sort(unique(youtuber$contents))  #컨텐츠 종류 저장
 
 mean.by.contents <- function(subject) {
   result <- c()
@@ -81,8 +77,8 @@ con.view.box_uppermean <- function() {
 
 # 조회수-좋아요 관계
 view.likes.point <- function() {
-  yout.data <- youtuber[, c(2,3)] 
-  total.data <- total[, c(1,2)]
+  yout.data <- youtuber[, c(2,3,6)] 
+  total.data <- total[, c(1,2,5)]
   ggplot(total.data, aes(x=views.1000, y=likes.100))+
     geom_point(color='red')+
     geom_smooth(method='lm', formula = 'y~x', color='red')+
@@ -115,7 +111,21 @@ top10 <- function() {
 
 #추천 컨텐츠 정하기
 over_10p.list <- conlist[table(youtuber$contents)>=5]
+over_10p.list
 
+
+con.return.pie <- function() {
+  tot <- mean.by.contents('likely_return.1000')*table(youtuber$contents)
+  tot <- (tot/sum(tot))*100
+  pie <- data.frame(conlist, tot)[2:3]
+  colnames(pie)<- c('contents','tlr')
+  ggplot(pie, aes(x='', y=tlr ,fill = factor(conlist))) +
+    geom_bar(stat='identity')+
+    theme_void()+
+    coord_polar(theta = "y", start=0)+
+    geom_text(aes(label=paste0(round(tlr,1),'%')),
+              position=position_stack(vjust=0.5))
+}
 
 
 con.view.box()
@@ -123,6 +133,6 @@ con.view.box_uppermean()
 view.likes.point()
 view.likes.bar()
 top10()
-youtuber
-
+youtuber$likely_return.1000
+con.return.pie()
 
