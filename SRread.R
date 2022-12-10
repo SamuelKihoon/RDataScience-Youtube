@@ -15,10 +15,13 @@ youtuber <- read.xlsx(file = file.path('/Users/kimsoryun/Documents/rtube/RDataSc
                       header=T, sheetName='보물섬', as.data.frame=TRUE,
                       colIndex=c(2:7))
 
+youtuber
+
 total <- read.xlsx(file = file.path('/Users/kimsoryun/Documents/rtube/RDataScience-Youtube/youtubers2.xlsx'),
                    header=T, sheetName='모듬', as.data.frame=TRUE,
                    colIndex=c(3:7))
 
+total
 
 
 youtuber$likes.rate <- youtuber$likes/youtuber$views.1000 #좋아요 비율 만들기
@@ -146,6 +149,68 @@ con.like.box_uppermean <- function() {
           main='컨텐츠별 평균 이상 좋아요수')
 }
 
+install.packages('fmsb')
+library(fmsb)
+
+x <- mean.by.contents('views.1000')*table(youtuber$contents)
+df<-as.data.frame(x)
+df <- t(df)
+df
+con.view.radar <- function()
+radarchart(df, # 데이터프레임
+           pcol='dark green', # 다각형선의색
+           pfcol=rgb(0.2,0.5,0.5,0.5), # 다각형내부색
+           plwd=3, # 다각형선의두께
+           cglcol='grey', # 거미줄의색
+           cglty=1, # 거미줄의타입
+           cglwd=0.8, # 거미줄의두께
+           axistype=1, # 축의레이블타입
+           seg=4, # 축의눈금분할
+           axislabcol='grey', # 축의레이블색
+           caxislabels=seq(0,100,25) # 축의레이블값
+)
+
+
+#추천 컨텐츠 정하기
+con.rec <- function() {
+  over_10p.list <- conlist[table(youtuber$contents)>=5]
+  over_10p.sub <- subset(youtuber, contents %in% over_10p.list)
+  conlist <- sort(unique(over_10p.sub$contents)) 
+  mean.by.contents <- function(subject) {
+    result <- c()
+    for(i in 1:length(conlist)) {
+      result <- append(result, mean(over_10p.sub[which(over_10p.sub$contents==conlist[i]),
+                                                 subject]))
+    }
+    names(result) <- conlist
+    return(result)
+  }
+  subtlr <- mean.by.contents('likely_return.1000')*table(over_10p.sub$contents) #총 예상수익
+  subv <- mean.by.contents('views.1000') #조회수
+  sublr <- mean.by.contents('likes.rate')  #좋아요 비율
+  
+  score <- c()
+  tmp.order <- order(subtlr)
+  for(j in 1:length(tmp.order)) {
+    score[tmp.order[j]] <- j
+  }
+  tmp.order <- order(subv)
+  for(j in 1:length(tmp.order)) {
+    score[tmp.order[j]] <- score[tmp.order[j]]+ j*5
+  }
+  tmp.order <- order(sublr)
+  for(j in 1:length(tmp.order)) {
+    score[tmp.order[j]] <- score[tmp.order[j]]+ j*5
+  }
+  link <- c()
+  for(i in 1:length(conlist)) {
+    p <- subset(over_10p.sub, contents==conlist[i])
+    link <- append(link, p[which(p$views.1000==max(p$views.1000)),'link'])
+  }
+  ds <- as.data.frame(cbind(subtlr, subv, sublr, score,link))
+  colnames(ds) <- c('총 예상수익','평균 조회수','좋아요 비율','추천도','추천 영상 링크')
+  ds[order(ds$추천도, decreasing = TRUE),]
+} 
 
 con.view.box()
 con.view.box_uppermean()
@@ -156,3 +221,4 @@ youtuber
 con.return.pie()
 con.like.box()
 con.like.box_uppermean()
+con.rec()
