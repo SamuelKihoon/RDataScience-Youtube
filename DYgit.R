@@ -213,8 +213,13 @@ con.rec <- function() {
   for(j in 1:length(tmp.order)) {
     score[tmp.order[j]] <- score[tmp.order[j]]+ j*5
   }
-  ds <- as.data.frame(cbind(subtlr, subv, sublr, score))
-  ds[order(ds$score, decreasing = TRUE),]
+  link <- c()
+  for(i in 1:length(conlist)) {
+    link <- append(link, subset(over_10p.sub, contents==conlist[i])[which(p$views.1000==max(p$views.1000)),'link'])
+  }
+  ds <- as.data.frame(cbind(subtlr, subv, sublr, score,link))
+  colnames(ds) <- c('총 예상수익','평균 조회수','좋아요 비율','추천도','추천 영상 링크')
+  ds[order(ds$추천도, decreasing = TRUE),]
 }  
 
 
@@ -223,11 +228,11 @@ con.rec <- function() {
 con.view.box()
 con.view.box_uppermean()
 view.likes.point()
+con.like.box()
+con.like.box_uppermean()
 view.likes.bar()
 top10()
 con.return.pie()
-con.like.box()
-con.like.box_uppermean()
 con.rec()
 
 
