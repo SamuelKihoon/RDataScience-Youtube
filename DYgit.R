@@ -101,12 +101,9 @@ top10 <- function() {
 }
 
 
-<<<<<<< HEAD
+
 
 #예상 수익 비율
-=======
-#컨텐츠 별 예상 수익 총합
->>>>>>> 8486bf3d7869fd4267007ebaf3f34b05f64cd9ce
 con.return.pie <- function() {
   tot <- mean.by.contents('likely_return.1000')*table(youtuber$contents)
   tot <- (tot/sum(tot))*100
