@@ -215,7 +215,8 @@ con.rec <- function() {
   }
   link <- c()
   for(i in 1:length(conlist)) {
-    link <- append(link, subset(over_10p.sub, contents==conlist[i])[which(p$views.1000==max(p$views.1000)),'link'])
+    p <- subset(over_10p.sub, contents==conlist[i])
+    link <- append(link, p[which(p$views.1000==max(p$views.1000)),'link'])
   }
   ds <- as.data.frame(cbind(subtlr, subv, sublr, score,link))
   colnames(ds) <- c('총 예상수익','평균 조회수','좋아요 비율','추천도','추천 영상 링크')
