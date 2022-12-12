@@ -47,21 +47,13 @@ R을 이용한 유튜브 데이터 마이닝 및 분석의 결과입니다:
    
 library(xlsx)
 library(ggplot2)
-
-
-
-
-
-
-youtuber <- read.xlsx(file = file.path('/Users/samuelgalaxys/Desktop/Rworks/RDataScience-Youtube/youtubers1.xlsx'),
+youtuber <- read.xlsx(file = file.path('C:/Rworks/youtubers1.xlsx'),
                       header=T, sheetName='옥냥이', as.data.frame=TRUE,
                       colIndex=c(2:7))
 
-total <- read.xlsx(file = file.path('/Users/samuelgalaxys/Desktop/Rworks/RDataScience-Youtube/youtubers2.xlsx'),
+total <- read.xlsx(file = file.path('C:/Rworks/youtubers2.xlsx'),
                    header=T, sheetName='모듬', as.data.frame=TRUE,
                    colIndex=c(3:7))
-
-
 
 youtuber$likes.rate <- (youtuber$likes/youtuber$views.1000)*10 #좋아요 비율 만들기
 conlist <- sort(unique(youtuber$contents))  #컨텐츠 종류 저장
@@ -244,8 +236,6 @@ view.likes.bar()
 top10()
 con.return.pie()
 con.rec()
-
-
 
 
 
