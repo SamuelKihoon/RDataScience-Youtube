@@ -61,6 +61,8 @@ total <- read.xlsx(file = file.path('/Users/samuelgalaxys/Desktop/Rworks/RDataSc
                    header=T, sheetName='모듬', as.data.frame=TRUE,
                    colIndex=c(3:7))
 
+
+
 youtuber$likes.rate <- (youtuber$likes/youtuber$views.1000)*10 #좋아요 비율 만들기
 conlist <- sort(unique(youtuber$contents))  #컨텐츠 종류 저장
 
@@ -198,7 +200,7 @@ con.rec <- function() {
     result <- c()
     for(i in 1:length(conlist)) {
       result <- append(result, mean(over_10p.sub[which(over_10p.sub$contents==conlist[i]),
-                                                 subject]))
+                                             subject]))
     } 
     names(result) <- conlist
     return(result)
@@ -242,6 +244,8 @@ view.likes.bar()
 top10()
 con.return.pie()
 con.rec()
+
+
 
 
 

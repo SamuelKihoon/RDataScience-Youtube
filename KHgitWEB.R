@@ -20,6 +20,7 @@ library(ggplot2)
 
 
 
+
 youtuber <- read.xlsx(file = file.path('/Users/samuelgalaxys/Desktop/Rworks/RDataScience-Youtube/youtubers1.xlsx'),
                       header=T, sheetName='옥냥이', as.data.frame=TRUE,
                       colIndex=c(2:7))
@@ -40,6 +41,7 @@ mean.by.contents <- function(subject) {
   names(result) <- conlist
   return(result)
 }   #컨텐츠별로 subject의 평균 계산 함수
+
 
 # 컨텐츠-조회수 관계(박스플롯)
 con.view.box <- function() {
@@ -209,6 +211,3 @@ view.likes.bar()
 top10()
 con.return.pie()
 con.rec()
-
-
-
