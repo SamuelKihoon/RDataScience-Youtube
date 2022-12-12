@@ -250,6 +250,9 @@ con.rec()
 
 
 
+
+
+
 ```
 
 라이브러리는 `library(xlsx), library(ggplot2)` 를 사용하였으며, 어쩌구저쩌구
