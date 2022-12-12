@@ -8,7 +8,7 @@ library(xlsx)
 library(ggplot2)
 
 
-
+par(mfrow=c(1,1), family = "AppleSDGothicNeo-Regular")
 
 
 youtuber <- read.xlsx(file = file.path('/Users/kimsoryun/Documents/rtube/RDataScience-Youtube/youtubers1.xlsx'),
