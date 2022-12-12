@@ -47,8 +47,8 @@ R을 이용한 유튜브 데이터 마이닝 및 분석의 결과입니다:
    
 library(xlsx)
 library(ggplot2)
-youtuber <- read.xlsx(file = file.path('C:/Rworks/youtubers1.xlsx'),
-                      header=T, sheetName='옥냥이', as.data.frame=TRUE,
+youtuber <- read.xlsx(file = file.path('C:/Rworks/youtubers2.xlsx'),
+                      header=T, sheetName='하승진', as.data.frame=TRUE,
                       colIndex=c(2:7))
 
 total <- read.xlsx(file = file.path('C:/Rworks/youtubers2.xlsx'),
