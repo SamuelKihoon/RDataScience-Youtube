@@ -35,6 +35,7 @@ mean.by.contents <- function(subject) {
   return(result)
 }   #컨텐츠별로 subject의 평균 계산 함수
 
+
 # 컨텐츠-조회수 관계(박스플롯)
 con.view.box <- function() {
   vbc <- mean.by.contents('views.1000')
@@ -48,6 +49,8 @@ con.view.box <- function() {
   cat('조회수가 가장 높은 영상의 컨텐츠는',max.con,'입니다.','\n')
   cat('평균 조회수가 가장 높은 영상의 컨텐츠는',max.mean,'입니다.')
 }
+
+
 
 # 평균 이상 데이터만 추출
 con.view.box_uppermean <- function() {
@@ -83,11 +86,17 @@ view.likes.point <- function() {
 
 #컨텐츠별 조회수/좋아요 비율
 view.likes.bar <- function() {
+  color = c()
+  color[1:length(conlist)] = '#76d6b0'
+  color[1]='#579e82'
   ds <- mean.by.contents('likes.rate')
-  barplot(ds, main='좋아요/조회수',
+  sort(ds, decreasing=TRUE)
+  barplot(sort(ds, decreasing=TRUE), main='좋아요/조회수',
           xlab='컨텐츠',
-          ylab='비율(%)')
+          ylab='비율(%)',
+          col = color)
 }
+
 
 #상위 10개 영상 출력
 top10 <- function() {
@@ -203,6 +212,7 @@ view.likes.bar()
 top10()
 con.return.pie()
 con.rec()
+
 
 
 
