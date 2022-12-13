@@ -14,8 +14,8 @@ install.packages('knitr')
 install.packages('xlsx')
 library(xlsx)
 library(ggplot2)
-youtuber <- read.xlsx(file = file.path('C:/Rworks/youtubers1.xlsx'),
-                      header=T, sheetName='옥냥이', as.data.frame=TRUE,
+youtuber <- read.xlsx(file = file.path('C:/Rworks/youtubers2.xlsx'),
+                      header=T, sheetName='전태풍', as.data.frame=TRUE,
                       colIndex=c(2:7))
 
 total <- read.xlsx(file = file.path('C:/Rworks/youtubers2.xlsx'),
@@ -43,8 +43,7 @@ con.view.box <- function() {
   boxplot(views.1000~contents,  
           data=youtuber,            
           main='컨텐츠별 조회수')
-  max.con <-youtuber[which(youtuber$views.1000==max(youtuber$views.1000)),
-                     'contents'] #조회수가 가장 높은 컨텐츠 저장
+  max.con <-names(vbc[1]) #조회수가 가장 높은 컨텐츠 저장
   
   max.mean <- names(vbc)[vbc== max(vbc)] #평균 조회수가 가장 높은 컨텐츠 저장
   cat('조회수가 가장 높은 영상의 컨텐츠는',max.con,'입니다.','\n')
@@ -136,11 +135,10 @@ con.like.box <- function() {
   boxplot(likes.100~contents,  
           data=youtuber,            
           main='컨텐츠별 좋아요수')
-  max.l.con <-youtuber[which(youtuber$likes.100==max(youtuber$likes.100)),
-                       'contents'] #조회수가 가장 높은 컨텐츠 저장
+  max.l.con <-names(clb[1]) #조회수가 가장 높은 컨텐츠 저장
   
   max.l.mean <- names(clb)[clb== max(clb)] #평균 좋아요수가 가장 높은 컨텐츠 저장
-  cat('좋아요수가 가장 높은 영상의 컨텐츠는',max.l.con,'입니다.')
+  cat('좋아요수가 가장 높은 영상의 컨텐츠는',max.l.con,'입니다.','\n')
   cat('평균 좋아요수가 가장 높은 영상의 컨텐츠는',max.l.mean,'입니다.')
 }
 
@@ -209,10 +207,10 @@ con.rec <- function() {
 
 con.view.box()
 con.view.box_uppermean()
-view.likes.point()
 con.like.box()
 con.like.box_uppermean()
 view.likes.bar()
+view.likes.point()
 top10()
 con.return.pie()
 con.rec()
