@@ -38,7 +38,8 @@ mean.by.contents <- function(subject) {
 
 # 컨텐츠-조회수 관계(박스플롯)
 con.view.box <- function() {
-  vbc <- mean.by.contents('views.1000')
+  vbc <- sort(mean.by.contents('views.1000'), decreasing=TRUE)
+  youtuber$contents<- factor(youtuber$contents, levels=names(vbc))
   boxplot(views.1000~contents,  
           data=youtuber,            
           main='컨텐츠별 조회수')
@@ -49,6 +50,7 @@ con.view.box <- function() {
   cat('조회수가 가장 높은 영상의 컨텐츠는',max.con,'입니다.','\n')
   cat('평균 조회수가 가장 높은 영상의 컨텐츠는',max.mean,'입니다.')
 }
+
 
 
 
@@ -129,6 +131,8 @@ con.return.pie <- function() {
 # 컨텐츠-좋아요수 관계 (박스플롯)
 con.like.box <- function() {
   clb <- mean.by.contents('likes.100')
+  clb <- sort(mean.by.contents('likes.100'), decreasing=TRUE)
+  youtuber$contents<- factor(youtuber$contents, levels=names(clb))
   boxplot(likes.100~contents,  
           data=youtuber,            
           main='컨텐츠별 좋아요수')
