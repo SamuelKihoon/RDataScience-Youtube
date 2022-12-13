@@ -204,7 +204,6 @@ con.rec <- function() {
 
 
 
-
 con.view.box()
 con.view.box_uppermean()
 view.likes.point()
