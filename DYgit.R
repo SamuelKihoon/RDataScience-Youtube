@@ -14,8 +14,8 @@ install.packages('knitr')
 install.packages('xlsx')
 library(xlsx)
 library(ggplot2)
-youtuber <- read.xlsx(file = file.path('C:/Rworks/youtubers2.xlsx'),
-                      header=T, sheetName='전태풍', as.data.frame=TRUE,
+youtuber <- read.xlsx(file = file.path('C:/Rworks/youtubers1.xlsx'),
+                      header=T, sheetName='매직박', as.data.frame=TRUE,
                       colIndex=c(2:7))
 
 total <- read.xlsx(file = file.path('C:/Rworks/youtubers2.xlsx'),
@@ -36,14 +36,20 @@ mean.by.contents <- function(subject) {
 }   #컨텐츠별로 subject의 평균 계산 함수
 
 
+mycol <- c()
+mycol[6:length(conlist)] <- 'gray'
+
 # 컨텐츠-조회수 관계(박스플롯)
 con.view.box <- function() {
+  max.con <-youtuber[which(youtuber$views.1000==max(youtuber$views.1000)),
+                     'contents'] #조회수가 가장 높은 컨텐츠 저장
   vbc <- sort(mean.by.contents('views.1000'), decreasing=TRUE)
   youtuber$contents<- factor(youtuber$contents, levels=names(vbc))
+  mycol[1:5] <- 'red'
   boxplot(views.1000~contents,  
           data=youtuber,            
-          main='컨텐츠별 조회수')
-  max.con <-names(vbc[1]) #조회수가 가장 높은 컨텐츠 저장
+          main='컨텐츠별 조회수',
+          col = mycol)
   
   max.mean <- names(vbc)[vbc== max(vbc)] #평균 조회수가 가장 높은 컨텐츠 저장
   cat('조회수가 가장 높은 영상의 컨텐츠는',max.con,'입니다.','\n')
@@ -65,9 +71,11 @@ con.view.box_uppermean <- function() {
   upperview <- subset(youtuber, contents %in% upper.mean) 
   #upper.mean에 있는 컨텐츠만 있는 subset 저장
   
+  mycolor <- rainbow(length(unique(upperview$contents)))
   boxplot(views.1000~contents,  
           data=upperview,            
-          main='컨텐츠별 조회수')
+          main='컨텐츠별 조회수',
+          col=mycolor)
 }
 
 # 조회수-좋아요 관계
@@ -129,13 +137,16 @@ con.return.pie <- function() {
 
 # 컨텐츠-좋아요수 관계 (박스플롯)
 con.like.box <- function() {
+  max.con <-youtuber[which(youtuber$views.1000==max(youtuber$views.1000)),
+                     'contents']  #좋아요가 가장 높은 컨텐츠 저장
   clb <- mean.by.contents('likes.100')
   clb <- sort(mean.by.contents('likes.100'), decreasing=TRUE)
+  mycol[1:5] <- 'red'
   youtuber$contents<- factor(youtuber$contents, levels=names(clb))
   boxplot(likes.100~contents,  
           data=youtuber,            
-          main='컨텐츠별 좋아요수')
-  max.l.con <-names(clb[1]) #조회수가 가장 높은 컨텐츠 저장
+          main='컨텐츠별 좋아요수',
+          col=mycol)
   
   max.l.mean <- names(clb)[clb== max(clb)] #평균 좋아요수가 가장 높은 컨텐츠 저장
   cat('좋아요수가 가장 높은 영상의 컨텐츠는',max.l.con,'입니다.','\n')
@@ -153,10 +164,11 @@ con.like.box_uppermean <- function() {
   }
   upperlike <- subset(youtuber, contents %in% upper.l.mean) 
   #upper.l.mean에 있는 컨텐츠만 있는 subset 저장
-  
+  mycolor <- rainbow(length(unique(upperlike$contents)))
   boxplot(likes.100~contents,  
           data=upperlike,            
-          main='컨텐츠별 평균 이상 좋아요수')
+          main='컨텐츠별 평균 이상 좋아요수',
+          col=mycolor)
 }
 
 
