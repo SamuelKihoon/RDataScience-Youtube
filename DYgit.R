@@ -14,8 +14,8 @@ install.packages('knitr')
 install.packages('xlsx')
 library(xlsx)
 library(ggplot2)
-youtuber <- read.xlsx(file = file.path('C:/Rworks/youtubers1.xlsx'),
-                      header=T, sheetName='매직박', as.data.frame=TRUE,
+youtuber <- read.xlsx(file = file.path('C:/Rworks/youtubers2.xlsx'),
+                      header=T, sheetName='하승진', as.data.frame=TRUE,
                       colIndex=c(2:7))
 
 total <- read.xlsx(file = file.path('C:/Rworks/youtubers2.xlsx'),
