@@ -15,7 +15,7 @@ install.packages('xlsx')
 library(xlsx)
 library(ggplot2)
 youtuber <- read.xlsx(file = file.path('C:/Rworks/youtubers1.xlsx'),
-                      header=T, sheetName='매직박', as.data.frame=TRUE,
+                      header=T, sheetName='보물섬', as.data.frame=TRUE,
                       colIndex=c(2:7))
 
 total <- read.xlsx(file = file.path('C:/Rworks/youtubers2.xlsx'),
@@ -136,7 +136,7 @@ con.return.pie <- function() {
 
 # 컨텐츠-좋아요수 관계 (박스플롯)
 con.like.box <- function() {
-  max.con <-youtuber[which(youtuber$views.1000==max(youtuber$views.1000)),
+  max.l.con <-youtuber[which(youtuber$likes.100==max(youtuber$likes.100)),
                      'contents']  #좋아요가 가장 높은 컨텐츠 저장
   clb <- mean.by.contents('likes.100')
   clb <- sort(mean.by.contents('likes.100'), decreasing=TRUE)
@@ -185,9 +185,9 @@ con.rec <- function() {
     names(result) <- conlist
     return(result)
   }#섭셋에서 작동하는 함수로 재설정
-  subtlr <- mean.by.contents('likely_return.1000')*table(over_10p.sub$contents) #총 예상수익
-  subv <- mean.by.contents('views.1000') #조회수
-  sublr <- mean.by.contents('likes.rate')  #좋아요 비율
+  subtlr <- floor(mean.by.contents('likely_return.1000')*table(over_10p.sub$contents)) #총 예상수익
+  subv <- floor(mean.by.contents('views.1000')) #조회수
+  sublr <- round(mean.by.contents('likes.rate'),digit=2)  #좋아요 비율
   
   score <- c()  #점수를 저장할 벡터
   tmp.order <- order(subtlr)
@@ -208,6 +208,7 @@ con.rec <- function() {
     link <- append(link, p[which(p$views.1000==max(p$views.1000)),'link'])
   } #각 컨텐츠별 가장 조회수가 높은 영상의 링크를 저장
   ds <- as.data.frame(cbind(subtlr, subv, sublr, score,link))
+  ds
   colnames(ds) <- c('총 예상수익','평균 조회수','좋아요 비율','추천도','추천 영상 링크')
   ds[order(ds$추천도, decreasing = TRUE),] #추천도에 따라 정렬후 출력
 }  
