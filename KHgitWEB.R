@@ -21,11 +21,11 @@ library(ggplot2)
 
 
 
-youtuber <- read.xlsx(file = file.path('/Users/samuelgalaxys/Desktop/Rworks/RDataScience-Youtube/youtubers1.xlsx'),
+youtuber <- read.xlsx(file = file.path('/Users/samuelgalaxys/Documents/RDataScience-Youtube/youtubers1.xlsx'),
                       header=T, sheetName='옥냥이', as.data.frame=TRUE,
                       colIndex=c(2:7))
 
-total <- read.xlsx(file = file.path('/Users/samuelgalaxys/Desktop/Rworks/RDataScience-Youtube/youtubers2.xlsx'),
+total <- read.xlsx(file = file.path('/Users/samuelgalaxys/Documents/RDataScience-Youtube/youtubers2.xlsx'),
                    header=T, sheetName='모듬', as.data.frame=TRUE,
                    colIndex=c(3:7))
 
@@ -45,17 +45,20 @@ mean.by.contents <- function(subject) {
 
 # 컨텐츠-조회수 관계(박스플롯)
 con.view.box <- function() {
-  vbc <- mean.by.contents('views.1000')
+  vbc <- sort(mean.by.contents('views.1000'), decreasing=TRUE)
+  youtuber$contents<- factor(youtuber$contents, levels=names(vbc))
   boxplot(views.1000~contents,  
           data=youtuber,            
           main='컨텐츠별 조회수')
-  max.con <-youtuber[which(youtuber$views.1000==max(youtuber$views.1000)),
-                     'contents'] #조회수가 가장 높은 컨텐츠 저장
+  max.con <-names(vbc[1]) #조회수가 가장 높은 컨텐츠 저장
   
   max.mean <- names(vbc)[vbc== max(vbc)] #평균 조회수가 가장 높은 컨텐츠 저장
   cat('조회수가 가장 높은 영상의 컨텐츠는',max.con,'입니다.','\n')
   cat('평균 조회수가 가장 높은 영상의 컨텐츠는',max.mean,'입니다.')
 }
+
+
+
 
 # 평균 이상 데이터만 추출
 con.view.box_uppermean <- function() {
@@ -91,11 +94,17 @@ view.likes.point <- function() {
 
 #컨텐츠별 조회수/좋아요 비율
 view.likes.bar <- function() {
+  color = c()
+  color[1:length(conlist)] = '#76d6b0'
+  color[1]='#579e82'
   ds <- mean.by.contents('likes.rate')
-  barplot(ds, main='좋아요/조회수',
+  sort(ds, decreasing=TRUE)
+  barplot(sort(ds, decreasing=TRUE), main='좋아요/조회수',
           xlab='컨텐츠',
-          ylab='비율(%)')
+          ylab='비율(%)',
+          col = color)
 }
+
 
 #상위 10개 영상 출력
 top10 <- function() {
@@ -128,14 +137,15 @@ con.return.pie <- function() {
 # 컨텐츠-좋아요수 관계 (박스플롯)
 con.like.box <- function() {
   clb <- mean.by.contents('likes.100')
+  clb <- sort(mean.by.contents('likes.100'), decreasing=TRUE)
+  youtuber$contents<- factor(youtuber$contents, levels=names(clb))
   boxplot(likes.100~contents,  
           data=youtuber,            
           main='컨텐츠별 좋아요수')
-  max.l.con <-youtuber[which(youtuber$likes.100==max(youtuber$likes.100)),
-                       'contents'] #조회수가 가장 높은 컨텐츠 저장
+  max.l.con <-names(clb[1]) #조회수가 가장 높은 컨텐츠 저장
   
   max.l.mean <- names(clb)[clb== max(clb)] #평균 좋아요수가 가장 높은 컨텐츠 저장
-  cat('좋아요수가 가장 높은 영상의 컨텐츠는',max.l.con,'입니다.')
+  cat('좋아요수가 가장 높은 영상의 컨텐츠는',max.l.con,'입니다.','\n')
   cat('평균 좋아요수가 가장 높은 영상의 컨텐츠는',max.l.mean,'입니다.')
 }
 
@@ -204,10 +214,14 @@ con.rec <- function() {
 
 con.view.box()
 con.view.box_uppermean()
-view.likes.point()
 con.like.box()
 con.like.box_uppermean()
 view.likes.bar()
+view.likes.point()
 top10()
 con.return.pie()
 con.rec()
+
+
+
+
