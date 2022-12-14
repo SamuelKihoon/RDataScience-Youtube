@@ -271,7 +271,7 @@ con.rec()
 옥냥이
 
 
-```{r pressure, echo=FALSE}
+```{r pressure2, echo=FALSE}
 
 
 
@@ -508,7 +508,7 @@ con.rec()
 풍월량
 
 
-```{r pressure, echo=FALSE}
+```{r pressure3, echo=FALSE}
 #git1234
 
 
@@ -736,7 +736,7 @@ con.rec()
 임다TV 
 
 
-```{r pressure, echo=FALSE}
+```{r pressure4, echo=FALSE}
 #git1234
 
 
@@ -965,7 +965,7 @@ con.rec()
 파뿌리
 
 
-```{r pressure, echo=FALSE}
+```{r pressure5, echo=FALSE}
 #git1234
 
 
@@ -1193,7 +1193,7 @@ con.rec()
 보물섬
 
 
-```{r pressure, echo=FALSE}
+```{r pressure6, echo=FALSE}
 #git1234
 
 
@@ -1422,7 +1422,7 @@ con.rec()
 정찬성
 
 
-```{r pressure, echo=FALSE}
+```{r pressure7, echo=FALSE}
 #git1234
 
 
@@ -1650,7 +1650,7 @@ con.rec()
 하승진
 
 
-```{r pressure, echo=FALSE}
+```{r pressure8, echo=FALSE}
 #git1234
 
 
@@ -1878,7 +1878,7 @@ con.rec()
 전태풍
 
 
-```{r pressure, echo=FALSE}
+```{r pressure9, echo=FALSE}
 #git1234
 
 
