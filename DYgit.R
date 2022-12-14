@@ -15,14 +15,14 @@ install.packages('xlsx')
 library(xlsx)
 library(ggplot2)
 youtuber <- read.xlsx(file = file.path('C:/Rworks/youtubers1.xlsx'),
-                      header=T, sheetName='보물섬', as.data.frame=TRUE,
+                      header=T, sheetName='매직박', as.data.frame=TRUE,
                       colIndex=c(2:7))
 
 total <- read.xlsx(file = file.path('C:/Rworks/youtubers2.xlsx'),
                    header=T, sheetName='모듬', as.data.frame=TRUE,
                    colIndex=c(3:7))
 
-youtuber$likes.rate <- (youtuber$likes/youtuber$views.1000)*10 #좋아요 비율 만들기
+youtuber$likes.rate <- round((youtuber$likes/youtuber$views.1000)*10,digit=2) #좋아요 비율 만들기
 conlist <- sort(unique(youtuber$contents))  #컨텐츠 종류 저장
 
 mean.by.contents <- function(subject) {
@@ -37,7 +37,7 @@ mean.by.contents <- function(subject) {
 
 
 mycol <- c()
-mycol[4:length(conlist)] <- '#76d6b0'
+mycol[4:length(conlist)] <- '#B8E089'
 
 # 컨텐츠-조회수 관계(박스플롯)
 con.view.box <- function() {
@@ -45,7 +45,7 @@ con.view.box <- function() {
                      'contents'] #조회수가 가장 높은 컨텐츠 저장
   vbc <- sort(mean.by.contents('views.1000'), decreasing=TRUE)
   youtuber$contents<- factor(youtuber$contents, levels=names(vbc))
-  mycol[1:3] <- '#579e82'
+  mycol[1:3] <- '#89BAE0'
   boxplot(views.1000~contents,  
           data=youtuber,            
           main='컨텐츠별 조회수',
@@ -74,7 +74,7 @@ con.view.box_uppermean <- function() {
   boxplot(views.1000~contents,  
           data=upperview,            
           main='컨텐츠별 조회수',
-          col='#579e82')
+          col='#89BAE0')
 }
 
 # 조회수-좋아요 관계
@@ -140,7 +140,7 @@ con.like.box <- function() {
                      'contents']  #좋아요가 가장 높은 컨텐츠 저장
   clb <- mean.by.contents('likes.100')
   clb <- sort(mean.by.contents('likes.100'), decreasing=TRUE)
-  mycol[1:3] <- '#579e82'
+  mycol[1:3] <- '#E09989'
   youtuber$contents<- factor(youtuber$contents, levels=names(clb))
   boxplot(likes.100~contents,  
           data=youtuber,            
@@ -166,7 +166,7 @@ con.like.box_uppermean <- function() {
   boxplot(likes.100~contents,  
           data=upperlike,            
           main='컨텐츠별 평균 이상 좋아요수',
-          col='#579e82')
+          col='#E09989')
 }
 
 
@@ -208,7 +208,6 @@ con.rec <- function() {
     link <- append(link, p[which(p$views.1000==max(p$views.1000)),'link'])
   } #각 컨텐츠별 가장 조회수가 높은 영상의 링크를 저장
   ds <- as.data.frame(cbind(subtlr, subv, sublr, score,link))
-  ds
   colnames(ds) <- c('총 예상수익','평균 조회수','좋아요 비율','추천도','추천 영상 링크')
   ds[order(ds$추천도, decreasing = TRUE),] #추천도에 따라 정렬후 출력
 }  
